@@ -1,34 +1,63 @@
+import Logger from '../../../logger';
+import { IUpdateNoteRequest } from './../dto/update-note-request';
+import { INoteRequestParams } from '../dto/note-params';
 import { NoteService } from './../domain/note-service';
 import { ICreateNoteRequest } from './../dto/create-note-request';
-import { ICreateNoteResponse } from '../dto/create-note-response';
+import { INoteResponse } from '../dto/note-response';
 import { RequestHandler } from "express";
 
 
 
-export const getAllNotes: RequestHandler<never, ICreateNoteResponse[], never> = async (req, res) => {
+export const getAllNotes: RequestHandler<never, INoteResponse[], never> = async (req, res) => {
     try {
         const noteService = new NoteService();
         const notes = await noteService.getAllNotes();
-        console.log("Request completed.");
-        return res.json(notes);
+        return res.status(201).json(notes);
     } catch (error) {
-        console.log(error);
+        Logger.error(error);
+        return res.status(500);
     }
 }
 
-export const createNote: RequestHandler<never, ICreateNoteResponse, ICreateNoteRequest> = async (req, res) => {
+export const createNote: RequestHandler<never, INoteResponse, ICreateNoteRequest> = async (req, res) => {
     try {
         const createNoteRequest: ICreateNoteRequest = req.body;
         const noteService = new NoteService();
         const note = await noteService.createNote(createNoteRequest);
-        console.log("Request completed.");
         return res.json(note);
     } catch (error) {
-        console.log(error);
+        Logger.error(error);
+        return res.status(400);
+    }
+}
+
+export const deleteNote: RequestHandler<INoteRequestParams, never, never> = async (req, res) => {
+    try {
+        const deleteNoteRequest: INoteRequestParams = req.params;
+        const noteService = new NoteService();
+        await noteService.deleteNote(deleteNoteRequest.noteId);
+    } catch (error) {
+        Logger.error(error);
+        return res.status(400).json();
+    }
+}
+
+export const updateNote: RequestHandler<INoteRequestParams, INoteResponse, IUpdateNoteRequest> = async (req, res) => {
+    try {
+        const updateNoteParams: INoteRequestParams = req.params;
+        const updateNoteRequest: IUpdateNoteRequest = req.body;
+        const noteService = new NoteService();
+        const updatedNote = await noteService.updateNote(updateNoteParams.noteId, updateNoteRequest);
+        return res.status(200).json(updatedNote);
+    } catch (error) {
+        Logger.error(error);
+        return res.status(400).json();
     }
 }
 
 export const NoteController = {
     createNote,
-    getAllNotes
+    getAllNotes,
+    deleteNote,
+    updateNote
 }

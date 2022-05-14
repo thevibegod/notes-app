@@ -1,6 +1,7 @@
 import { Express,Request, Response } from "express";
 import bodyParser from "body-parser";
 import noteRouter from "./modules/notes/router";
+import morganMiddleware from "./MorganMiddleware";
 
 const express = require('express');
 
@@ -8,6 +9,7 @@ const app : Express = express();
 const port : Number = 5000;
 
 app.use(bodyParser.json());
+app.use(morganMiddleware);
 
 app.use("/api/notes/",noteRouter);
 
