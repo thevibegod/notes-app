@@ -12,7 +12,7 @@ export const getAllNotes: RequestHandler<never, INoteResponse[], never> = async 
     try {
         const noteService = new NoteService();
         const notes = await noteService.getAllNotes();
-        return res.status(201).json(notes);
+        return res.status(200).json(notes);
     } catch (error) {
         Logger.error(error);
         return res.status(500);
@@ -24,7 +24,7 @@ export const createNote: RequestHandler<never, INoteResponse, ICreateNoteRequest
         const createNoteRequest: ICreateNoteRequest = req.body;
         const noteService = new NoteService();
         const note = await noteService.createNote(createNoteRequest);
-        return res.json(note);
+        return res.status(201).json(note);
     } catch (error) {
         Logger.error(error);
         return res.status(400);

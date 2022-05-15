@@ -7,8 +7,8 @@ const express = require('express');
 
 const app : Express = express();
 const port : Number = 5000;
-
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded());
 app.use(morganMiddleware);
 
 app.use("/api/notes/",noteRouter);
