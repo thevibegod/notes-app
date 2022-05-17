@@ -15,7 +15,7 @@ export const getAllNotes: RequestHandler<never, INoteResponse[], never> = async 
         return res.status(200).json(notes);
     } catch (error) {
         Logger.error(error);
-        return res.status(500);
+        return res.status(500).json();
     }
 }
 
@@ -27,7 +27,7 @@ export const createNote: RequestHandler<never, INoteResponse, ICreateNoteRequest
         return res.status(201).json(note);
     } catch (error) {
         Logger.error(error);
-        return res.status(400);
+        return res.status(400).json();
     }
 }
 
@@ -36,6 +36,7 @@ export const deleteNote: RequestHandler<INoteRequestParams, never, never> = asyn
         const deleteNoteRequest: INoteRequestParams = req.params;
         const noteService = new NoteService();
         await noteService.deleteNote(deleteNoteRequest.noteId);
+        return res.status(204).json();
     } catch (error) {
         Logger.error(error);
         return res.status(400).json();

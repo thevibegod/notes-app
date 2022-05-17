@@ -26,7 +26,7 @@ export class NoteRepositoryImpl implements NoteRepository {
     }
 
     public deleteNote(note: NoteModel): Promise<void> {
-        return note?.destroy();
+        return note.destroy();
     }
 
     public updateNote(note: NoteModel, updateNoteAttributes: IUpdateNoteRequest): Promise<NoteModel> {

@@ -34,7 +34,7 @@ export class NoteService {
         const note = await this.noteRepository.fetchNote(noteId);
         if (note === null)
             throw new Error("Bad request");
-        await this.noteRepository.deleteNote(note);
+        this.noteRepository.deleteNote(note);
     }
 
     public async updateNote(noteId: String, updateNoteRequest: IUpdateNoteRequest) {
